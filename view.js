@@ -17,71 +17,52 @@ class View {
     } else {
       this.main.innerHTML = '';
       this.table = document.createElement('table');
-      this.tableHeaderRow = document.createElement('tr');
       this.main.appendChild(this.table);
-      this.tableHead = this.table.createTHead();
-      this.tableHead.appendChild(this.tableHeaderRow);
     }
 
-    const tableHeaderData = [];
-    const tableBodyData = [];
+    this.tableBody = this.table.createTBody(); // <tbody>
 
+    // todo, loop through only the latest added contact and append to existing contacts
     contacts.forEach((contact) => {
+      this.tableBodyRow = this.tableBody.insertRow();
+      let value;
+      const tHead = document.querySelector('thead');
+      if (!tHead) {
+        this.tableHead = this.table.createTHead(); //<thead/>
+        this.tableHeaderRow = document.createElement('tr');
+        this.tableHead.appendChild(this.tableHeaderRow); // <thead><tr></tr></thead>
+      } else {
+        this.tableHead = '';
+      }
       for (let key in contact) {
-        // add the key if it exists in contacts, and tableHeaderData doesn't already have it
-        if (contact[key] !== '') {
-          if (key !== 'id' && key !== 'date') {
-            if (contact.hasOwnProperty(key) && !tableHeaderData.includes(key)) {
-              tableHeaderData.push(key);
-            }
+        if (key === 'id') continue;
+        value = contact[key];
+        if (!!this.tableHead) {
+          this.tableHeaderContent = document.createElement('th'); // <th/>
+          switch (key) {
+            case 'firstName':
+              this.tableHeaderContent.textContent = 'First Name';
+              break;
+            case 'lastName':
+              this.tableHeaderContent.textContent = 'Last Name';
+              break;
+            case 'phoneNumber':
+              this.tableHeaderContent.textContent = 'Phone Number';
+              break;
+            case 'email':
+              this.tableHeaderContent.textContent = 'Email';
+              break;
+            case 'date':
+              this.tableHeaderContent.textContent = 'Date';
+              break;
           }
         }
+        this.tableHeaderRow.append(this.tableHeaderContent); // <tr><th></th></tr>
+        let newCell = this.tableBodyRow.insertCell(); // <tr><td>{value}</td></tr>
+        newCell.setAttribute('contenteditable', 'true');
+        if (key === 'date') newCell.removeAttribute('contenteditable');
+        newCell.textContent = value || '';
       }
-    });
-
-    contacts.forEach((contact) => {
-      for (let key in contact) {
-        if (contact[key] == '') {
-          tableBodyData.push('');
-        }
-        if (key !== 'id') {
-          tableBodyData.push(contact[key]);
-        }
-      }
-
-      console.log('tableBodyData - ', tableBodyData);
-    });
-
-    tableHeaderData.forEach((header) => {
-      // add if statement to check already rendered 'th' elements
-      this.tableHeader = document.createElement('th');
-      switch (header) {
-        case 'firstName':
-          !!header ? (this.tableHeader.textContent = 'First Name') : '';
-          break;
-        case 'lastName':
-          this.tableHeader.textContent = 'Last Name';
-          break;
-        case 'phoneNumber':
-          this.tableHeader.textContent = 'Phone Number';
-          break;
-        case 'email':
-          this.tableHeader.textContent = 'Email';
-          break;
-      }
-      this.tableHeaderRow.append(this.tableHeader);
-    });
-    this.tableHeader = document.createElement('th');
-    this.tableHeader.textContent = 'Date';
-    this.tableHeaderRow.append(this.tableHeader);
-
-    this.tableBody = this.table.createTBody();
-    this.tableBodyRow = document.createElement('tr');
-    this.tableBody.append(this.tableBodyRow);
-    tableBodyData.forEach((item) => {
-      this.tableData = document.createElement('td');
-      this.tableData.textContent = item;
-      this.tableBodyRow.append(this.tableData);
     });
   }
 
