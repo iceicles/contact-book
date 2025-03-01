@@ -41,7 +41,10 @@ class View {
 
     contacts.forEach((contact) => {
       for (let key in contact) {
-        if (contact[key] != '' && key !== 'id') {
+        if (contact[key] == '') {
+          tableBodyData.push('');
+        }
+        if (key !== 'id') {
           tableBodyData.push(contact[key]);
         }
       }
@@ -50,6 +53,7 @@ class View {
     });
 
     tableHeaderData.forEach((header) => {
+      // add if statement to check already rendered 'th' elements
       this.tableHeader = document.createElement('th');
       switch (header) {
         case 'firstName':
