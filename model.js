@@ -1,17 +1,3 @@
-const data = {
-  firstName: 'john',
-  lastName: 'doe',
-  phoneNumber: '409-430-4029',
-  email: 'jondoe@mail.com',
-};
-
-const data2 = {
-  firstName: 'jane',
-  lastName: 'doe',
-  phoneNumber: '509-430-4029',
-  email: 'janedoe@mail.com',
-};
-
 class Model {
   id = 0;
   constructor() {
@@ -28,12 +14,20 @@ class Model {
   }
 
   addContact(data) {
-    let contactId = this.incrementId();
     this.contacts.push({
-      id: contactId,
+      id: this.incrementId(),
       ...data,
       date: new Date(),
     });
+  }
+
+  getContactById() {
+    return this.getContacts().filter((contact) => contact.id === this.id);
+  }
+
+  //[not in use]
+  getRecentlyAddedContact() {
+    return this.getContacts()[this.getContacts().length - 1] || [];
   }
 }
 

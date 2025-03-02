@@ -14,7 +14,8 @@ class Controller {
   }
 
   updateView() {
-    this.view.render(this.model.getContacts());
+    this.view.render(this.model.getContacts(), this.model.id);
+    // this.view.render(this.model.getRecentlyAddedContact());
   }
 
   handleAddContact(contacts) {
