@@ -1,3 +1,6 @@
+import LocalStorage from './localStorage.js';
+import { dataModel } from './interfaces.js';
+
 class Model {
   id = 0;
   constructor() {
@@ -10,7 +13,7 @@ class Model {
 
   getContacts() {
     console.log('[model] contacts - ', this.contacts);
-    return this.contacts;
+    return JSON.parse(localStorage.getItem(dataModel.CONTACT)) || [];
   }
 
   addContact(data) {
@@ -19,8 +22,14 @@ class Model {
       ...data,
       date: new Date(),
     });
+    LocalStorage.setItem(dataModel.CONTACT, this.contacts);
   }
 
+  deleteContacts() {
+    LocalStorage.clear();
+  }
+
+  //[not in use]
   getContactById() {
     return this.getContacts().filter((contact) => contact.id === this.id);
   }

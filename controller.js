@@ -14,13 +14,21 @@ class Controller {
   }
 
   updateView() {
+    // update view with newly added contact
     this.view.render(this.model.getContacts(), this.model.id);
+
+    // update view with 'delete all contacts' button
+    this.view.bindDeleteContacts(this.handleDeleteContacts.bind(this));
     // this.view.render(this.model.getRecentlyAddedContact());
   }
 
   handleAddContact(contacts) {
     this.model.addContact(contacts);
     this.updateView();
+  }
+
+  handleDeleteContacts() {
+    this.model.deleteContacts();
   }
 }
 

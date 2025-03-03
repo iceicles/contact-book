@@ -9,19 +9,31 @@ class View {
     this.phoneNumber = document.querySelector('#phone-number');
     this.email = document.querySelector('#email');
     this.submitBtn = document.querySelector('#submit-btn');
+    this.noContactsMsg = document.createElement('p');
     this.tableInitialized = false;
   }
 
   // what gets rendered when a new contact is added
   render(contacts, contactId) {
     if (Object.values(contacts).length <= 0) {
-      getMainEl.innerHTML = '<p>Nothing for now...</p>';
+      this.noContactsMsg.classList.add('empty-contacts-msg');
+      this.noContactsMsg.textContent = 'Nothing for now...';
+      getMainEl.appendChild(this.noContactsMsg);
       return;
     }
 
     // only clear and initialize table on first render
     if (!this.tableInitialized) {
-      getMainEl.innerHTML = '';
+      // remove empty msg node
+      getMainEl.querySelector('p.empty-contacts-msg')?.remove();
+
+      // add 'delete all contacts' btn
+      this.deleteContactsBtn = document.createElement('button');
+      this.deleteContactsBtn.classList.add('del-contacts');
+      this.deleteContactsBtn.id = 'del-contacts';
+      this.deleteContactsBtn.textContent = 'Delete All Contacts';
+      getMainEl.append(this.deleteContactsBtn);
+
       TableView.addContacts(Object.values(contacts));
       this.tableInitialized = true;
     } else if (contactId) {
@@ -66,6 +78,17 @@ class View {
       }
       this.clearInputValues();
     });
+  }
+
+  // deletes all contacts
+  bindDeleteContacts(handler) {
+    // only add listener if there's a table present
+    if (this.tableInitialized) {
+      this.deleteContactsBtn.addEventListener('click', () => {
+        handler();
+        location.reload(); // reloads current page
+      });
+    }
   }
 }
 
