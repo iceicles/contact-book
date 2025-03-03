@@ -2,6 +2,25 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    border: 0;
+}
+
+:root {
+    --danger: rgb(220,20,60);
+    --success: rgba(7, 120, 7, 0.808);
+    --success-light: rgba(0, 176, 0, 0.555);
+    /* https://www.color-hex.com/color-palette/24138 */
+    --slate-light: rgb(81, 90, 94);
+    --slate-medium: rgb(96, 102, 109);
+    --slate-dark: rgb(65, 72, 77);
+    --slate-muted: rgb(94, 94, 101);
+    --slate-deep: rgb(58, 61, 69);
+    --slate-brown: rgb(96,96,96);
+}
+
+button, 
+input[type='submit']{
+    cursor: pointer;
 }
 
 .form-container {
@@ -27,12 +46,24 @@
 
 .contact-form input {
     padding: 5px;
+    &:not(input[type='submit']) {
+        border-bottom: 1px solid var(--slate-dark);
+    }
 }
 
 .contact-form input[type='submit']{
     padding: 10px 5px;
-    margin: 0 auto;
-    width: 20%
+    margin: 40px auto 0 auto;
+    width: 20%;
+    background-color: var(--success);
+    color: white;
+    font-weight: 700;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+.contact-form input[type='submit']:active {
+    background-color: var(--success-light);
 }
 
 .name-container,
@@ -40,7 +71,7 @@
     display: flex;
     justify-content: center;
     flex: 1;
-    gap: 5px;
+    gap: 30px;
 }
 
 main {
@@ -52,11 +83,26 @@ table {
 }
 
 td, th {
-    border: 1px solid lightgray;
+    border: 1px solid var(--slate-brown);
     text-align: left;
     padding: 8px;
 }
 
 tr:nth-child(even) {
-    background-color: lightgray;
+    background-color: var(--slate-light);
+    color: white;
+}
+
+.empty-contacts-msg {
+    display: block;
+    font-size: 20px;
+}
+
+.del-contacts{
+    padding: 5px 10px;
+    margin-bottom: 20px;
+    background-color: var(--danger);
+    color: white;
+    border-radius: 5px;
+    font-weight: 400;
 }
