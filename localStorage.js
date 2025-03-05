@@ -3,7 +3,7 @@ class LocalStorage {
     localStorage.setItem(key, JSON.stringify(value));
   }
   getItem(key) {
-    localStorage.getItem(key);
+    return localStorage.getItem(key);
   }
   deleteItem(key) {
     localStorage.removeItem(key);
