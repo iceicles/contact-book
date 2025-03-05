@@ -7,8 +7,9 @@
 
 :root {
     --danger: rgb(220,20,60);
-    --success: rgba(7, 120, 7, 0.808);
-    --success-light: rgba(0, 176, 0, 0.555);
+    /* --danger: rgb(251,46,1); */
+    --success: rgb(15, 255, 149);
+    /* --success-light: rgb(159, 248, 210); */
     /* https://www.color-hex.com/color-palette/24138 */
     --slate-light: rgb(81, 90, 94);
     --slate-medium: rgb(96, 102, 109);
@@ -16,11 +17,25 @@
     --slate-muted: rgb(94, 94, 101);
     --slate-deep: rgb(58, 61, 69);
     --slate-brown: rgb(96,96,96);
+    /* https://www.color-hex.com/color/34344a#color-schemes */
+    --space-cadet: rgb(52 52 74);
+    --space-cadet-light: rgb(62,60,83)
+
+
+}
+
+body {
+   background-color: var(--space-cadet);
+   color: white;
 }
 
 button, 
 input[type='submit']{
     cursor: pointer;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: 400;
 }
 
 .form-container {
@@ -44,27 +59,24 @@ input[type='submit']{
     width: 30%;
 }
 
-.contact-form input {
+.contact-form input:not(input[type='submit']) {
     padding: 5px;
-    &:not(input[type='submit']) {
-        border-bottom: 1px solid var(--slate-dark);
-    }
+    color: white;
+    border-bottom: 1px solid var(--slate-brown);
+    background-color: rgb(52 52 74);
+    border-radius: 5px;
 }
 
 .contact-form input[type='submit']{
-    padding: 10px 5px;
     margin: 40px auto 0 auto;
     width: 20%;
     background-color: var(--success);
-    color: white;
-    font-weight: 700;
-    border-radius: 5px;
     font-size: 18px;
 }
 
-.contact-form input[type='submit']:active {
+/* .contact-form input[type='submit']:active {
     background-color: var(--success-light);
-}
+} */
 
 .name-container,
 .other-info-container {
@@ -83,13 +95,17 @@ table {
 }
 
 td, th {
-    border: 1px solid var(--slate-brown);
     text-align: left;
     padding: 8px;
 }
 
+th {
+    width: 10%;
+    max-width: 150px;
+}
+
 tr:nth-child(even) {
-    background-color: var(--slate-light);
+    background-color: var(--space-cadet-light);
     color: white;
 }
 
@@ -99,10 +115,6 @@ tr:nth-child(even) {
 }
 
 .del-contacts{
-    padding: 5px 10px;
     margin-bottom: 20px;
     background-color: var(--danger);
-    color: white;
-    border-radius: 5px;
-    font-weight: 400;
 }
