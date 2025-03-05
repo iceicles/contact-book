@@ -2,9 +2,12 @@ import LocalStorage from './localStorage.js';
 import { dataModel } from './interfaces.js';
 
 class Model {
-  id = 0;
   constructor() {
-    this.contacts = [];
+    this.contacts = JSON.parse(localStorage.getItem(dataModel.CONTACT)) || [];
+    this.id =
+      this.contacts.length > 0
+        ? Math.max(...this.contacts.map((c) => c.id))
+        : 0;
   }
 
   incrementId() {
@@ -13,20 +16,48 @@ class Model {
 
   getContacts() {
     console.log('[model] contacts - ', this.contacts);
-    return JSON.parse(localStorage.getItem(dataModel.CONTACT)) || [];
+    return this.contacts;
   }
 
   addContact(data) {
-    this.contacts.push({
+    const newContact = {
       id: this.incrementId(),
       ...data,
-      date: new Date(),
-    });
-    LocalStorage.setItem(dataModel.CONTACT, this.contacts);
+      date: new Date().toISOString(),
+    };
+    this.contacts.push(newContact);
+    this.saveContacts();
   }
 
   deleteContacts() {
+    this.contacts = [];
     LocalStorage.clear();
+  }
+
+  updateContact(contactId, key, value) {
+    // find the contact in the array
+    const contactIndex = this.contacts.findIndex(
+      (contact) => contact.id === contactId
+    );
+
+    // contactIndex must be present in contacts data
+    if (contactIndex !== -1) {
+      // update the specific field
+      this.contacts[contactIndex][key] = value;
+      console.log(`Updated contact ${contactId}: ${key} = ${value}`);
+
+      // save to localStorage
+      this.saveContacts();
+      return true;
+    }
+
+    console.log(`Contact with ID ${contactId} not found`);
+    return false;
+  }
+
+  // save contacts to localStorage
+  saveContacts() {
+    LocalStorage.setItem(dataModel.CONTACT, this.contacts);
   }
 
   //[not in use]

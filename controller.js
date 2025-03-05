@@ -8,6 +8,7 @@ class Controller {
 
     // bind view to model
     this.view.bindAddContact(this.handleAddContact.bind(this));
+    this.view.bindUpdateContact(this.handleUpdateContact.bind(this));
 
     // initial render
     this.updateView();
@@ -22,6 +23,15 @@ class Controller {
     // this.view.render(this.model.getRecentlyAddedContact());
   }
 
+  handleUpdateContact(contactId, key, value) {
+    console.log(
+      `Controller handling update: contact ${contactId}, field ${key} to "${value}"`
+    );
+    this.model.updateContact(contactId, key, value);
+    // no need to call updateView() here - we don't need to refresh the entire table
+    // the change is already visible in the DOM because the user edited it directly
+  }
+
   handleAddContact(contacts) {
     this.model.addContact(contacts);
     this.updateView();
@@ -32,6 +42,4 @@ class Controller {
   }
 }
 
-const app = new Controller(new Model(), new View());
-
-document.addEventListener('DOMContentLoaded', app);
+new Controller(new Model(), new View());

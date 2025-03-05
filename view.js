@@ -70,6 +70,7 @@ class View {
     return result.length;
   }
 
+  // create new contact
   bindAddContact(handler) {
     this.submitBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -80,7 +81,13 @@ class View {
     });
   }
 
-  // deletes all contacts
+  // edit contact
+  bindUpdateContact(handler) {
+    // pass the handler to TableView so it can be called when cells are edited
+    TableView.setUpdateContactCallback(handler);
+  }
+
+  // delete all contacts
   bindDeleteContacts(handler) {
     // only add listener if there's a table present
     if (this.tableInitialized) {

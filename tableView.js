@@ -1,8 +1,13 @@
+import { debounce } from './debounce.js';
 import getMainEl from './mainTag.js';
 
 class TableView {
   constructor() {
     this.tableInitialized = false;
+    this.updateContactCallback = null;
+    // store a reference map of cells to their data
+    // WeakMap used for performance reasons -  garbage collected
+    this.cellMap = new WeakMap();
   }
 
   initializeTable() {
@@ -43,13 +48,28 @@ class TableView {
   }
 
   createTableDataCell(row) {
-    return row.insertCell(); // <tr><td></td></tr>
+    return row.insertCell(); // <td/> in <tr><td></td></tr>
   }
 
-  setTableDataContent(cell, key, value) {
+  setTableDataContent(cell, key, value, contact) {
     cell.setAttribute('contenteditable', 'true');
-    if (key === 'date') cell.removeAttribute('contenteditable');
-    cell.textContent = value || ''; // <td>{value}</td>
+
+    // associate data with the cell
+    this.cellMap.set(cell, {
+      contactId: contact.id,
+      key: key,
+    });
+
+    if (key === 'date') {
+      cell.removeAttribute('contenteditable');
+      const date = new Date(value);
+      cell.textContent = date.toLocaleDateString();
+    } else {
+      cell.textContent = value || '';
+
+      // attach event listeners to listen to changes on each cell
+      this.bindDataCellChanges(cell);
+    }
   }
 
   setTableHeadContent(key) {
@@ -91,6 +111,7 @@ class TableView {
 
     // create a new row for this contact
     const newRow = this.createTableBodyRow();
+    newRow.dataset.rowId = `row-${contact.id}`;
 
     // add table headers if needed and create cells for each property
     for (let key in contact) {
@@ -100,13 +121,18 @@ class TableView {
       this.setTableHeadContent(key);
 
       const cell = this.createTableDataCell(newRow);
-      this.setTableDataContent(cell, key, contact[key]);
+      this.setTableDataContent(cell, key, contact[key], contact);
     }
   }
 
   // add a contact to the table - can be called with either a single contact or an ID
   addContact(contacts, contactId) {
-    return this.addContactRow(contacts[contactId - 1]);
+    if (contactId) {
+      return this.addContactRow(contacts[contactId - 1]);
+    } else {
+      // if no ID is provided, assume contacts is a single contact object
+      return this.addContactRow(contacts);
+    }
   }
 
   // can be used to add a batch of contacts
@@ -116,6 +142,57 @@ class TableView {
     // add each contact
     return contacts.map((contact) => this.addContactRow(contact));
   }
+
+  /* sets this.updateContactCallback from null (initially) to the controller's handler (callback).
+   this happens during controller's construction
+  */
+  setUpdateContactCallback(callback) {
+    this.updateContactCallback = callback;
+  }
+
+  // handle cell editing
+  handleCellEdit(cell) {
+    /* this check will almost never be true as updateContactCallback is set to handler in controller
+     however, it is here for safety reasons
+    */
+    if (!this.updateContactCallback) return;
+
+    // get the data from weakmap
+    const cellData = this.cellMap.get(cell);
+
+    // if data is not found, we don't edit
+    if (!cellData) {
+      console.error('Cell data not found in WeakMap!');
+      return;
+    }
+
+    const { contactId, key } = cellData;
+    const newValue = cell.textContent;
+    console.log(`Updating contact ${contactId}, field ${key} to "${newValue}"`);
+
+    // call the callback (the handler) from the controller and pass args
+    this.updateContactCallback(contactId, key, newValue);
+  }
+
+  // bind events to editable cells
+  bindDataCellChanges(cell) {
+    // debounce to avoid excessive updates while typing
+    const debouncedUpdate = debounce(() => this.handleCellEdit(cell), 500);
+
+    // listen for both input and 'Enter' key events
+    cell.addEventListener('input', debouncedUpdate);
+    cell.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // prevent adding a newline
+        // remove focus to trigger the blur event - blur event not in use
+        // cell.blur();
+      }
+    });
+  }
 }
 
+/*
+the import in view.js is called during module loading phase due type="module" (es modules)
+this means, this file's constructor gets called first before model, view, then controller
+*/
 export default new TableView();
