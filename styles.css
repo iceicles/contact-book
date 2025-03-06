@@ -6,27 +6,63 @@
 }
 
 :root {
-    --danger: rgb(220,20,60);
+    --danger: rgb(253 14 53);
+    --warning: rgb(255 255 51);
     /* --danger: rgb(251,46,1); */
     --success: rgb(15, 255, 149);
     /* --success-light: rgb(159, 248, 210); */
     /* https://www.color-hex.com/color-palette/24138 */
     --slate-light: rgb(81, 90, 94);
-    --slate-medium: rgb(96, 102, 109);
+    --slate-medium: rgb(119, 141, 165);
     --slate-dark: rgb(65, 72, 77);
     --slate-muted: rgb(94, 94, 101);
     --slate-deep: rgb(58, 61, 69);
     --slate-brown: rgb(96,96,96);
     /* https://www.color-hex.com/color/34344a#color-schemes */
+    /* https://encycolorpedia.com/34344a */
     --space-cadet: rgb(52 52 74);
-    --space-cadet-light: rgb(62,60,83)
-
+    --space-cadet-light: rgb(68 68 90);
+    --space-cadet-darker: rgb(43 43 57);
+    --space-cadet-darkslateblue: rgb(72 61 139);
+    --space-cadet-inverted: rgb(203 203 181);
+    --space-cadet-saturated: rgb(49 49 77);
+    --space-cadet-desaturated: rgb(54 54 72);
+    --space-cadet-grayscale: rgb(63 63 63);
+    --space-cadet-navy: rgb(0 0 128);
 
 }
 
 body {
    background-color: var(--space-cadet);
    color: white;
+}
+
+main {
+    width: 75%;
+    margin: 0 auto;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 0;
+    width: 100%;
+}
+
+table th,
+table td {
+    padding: 1.5rem;
+    text-align: center;
+    max-width: 0;
+}
+
+thead tr {
+    background-color: var(--space-cadet-darkslateblue);
+    border-radius: 5px;
+}
+
+table th {
+    width: 10%;
+    max-width: 100px;
 }
 
 button, 
@@ -49,29 +85,30 @@ input[type='submit']{
 .contact-form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 30px;
 }
 
 .contact-form label {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    width: 30%;
+    gap: 10px;
+    width: 40%;
 }
 
 .contact-form input:not(input[type='submit']) {
     padding: 5px;
     color: white;
     border-bottom: 1px solid var(--slate-brown);
-    background-color: rgb(52 52 74);
+    background-color: var(--space-cadet);
     border-radius: 5px;
 }
 
 .contact-form input[type='submit']{
     margin: 40px auto 0 auto;
-    width: 20%;
+    /* width: 20%; */
     background-color: var(--success);
     font-size: 18px;
+    padding: 15px;
 }
 
 /* .contact-form input[type='submit']:active {
@@ -86,35 +123,71 @@ input[type='submit']{
     gap: 30px;
 }
 
-main {
-    width: 75%;
-    margin: 0 auto;
-}
-table {
-    width: 100%;
-}
-
-td, th {
-    text-align: left;
-    padding: 8px;
-}
-
-th {
-    width: 10%;
-    max-width: 150px;
-}
-
-tr:nth-child(even) {
-    background-color: var(--space-cadet-light);
-    color: white;
-}
-
 .empty-contacts-msg {
     display: block;
     font-size: 20px;
+    margin-top: 5rem;
+    text-align: center;
 }
 
 .del-contacts{
     margin-bottom: 20px;
     background-color: var(--danger);
+}
+
+
+@media (max-width: 910px) {
+    table {
+        border: 1px solid var(--space-cadet-light);
+        max-width: 100vw;
+    }
+
+    table thead tr {
+        display: none;
+    }
+
+    table tr {
+        display: block;
+    }
+
+    table th,
+    table td { 
+        max-width: unset;
+    }
+
+    table tr, table td {
+        padding: 0.5rem;
+    }
+
+    table td {
+        text-align: right;
+        display: block;
+    }
+
+    table td::before {
+        content: attr(data-title);
+        float: left;
+        font-weight: 600;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: var(--space-cadet-darkslateblue);
+    }
+
+}
+
+@media(max-width: 520px) {
+    .name-container,
+    .other-info-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .contact-form label {
+        width: 100%;
+    }
+
+    .contact-form input[type='submit'] {
+        width: 100%;
+    }
 }
