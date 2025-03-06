@@ -8,6 +8,7 @@ class TableView {
     // store a reference map of cells to their data
     // WeakMap used for performance reasons -  garbage collected
     this.cellMap = new WeakMap();
+    this.isNewContactAdded = false;
   }
 
   initializeTable() {
@@ -16,6 +17,7 @@ class TableView {
       this.createTableHead();
       this.createTableBody();
       this.tableInitialized = true;
+      this.isNewContactAdded = false;
     }
   }
 
@@ -59,6 +61,8 @@ class TableView {
       contactId: contact.id,
       key: key,
     });
+
+    cell.dataset.title = key.charAt(0).toUpperCase() + key.slice(1);
 
     if (key === 'date') {
       cell.removeAttribute('contenteditable');
@@ -122,13 +126,22 @@ class TableView {
 
       const cell = this.createTableDataCell(newRow);
       this.setTableDataContent(cell, key, contact[key], contact);
+
+      // insert the new row at the top ONLY when a new contact is added (not on page load)
+      if (this.isNewContactAdded) {
+        this.tableBody.insertBefore(newRow, this.tableBody.firstChild);
+      } else {
+        this.tableBody.appendChild(newRow); // normal append during initial page load
+      }
     }
   }
 
   // add a contact to the table - can be called with either a single contact or an ID
   addContact(contacts, contactId) {
+    this.isNewContactAdded = true;
+
     if (contactId) {
-      return this.addContactRow(contacts[contactId - 1]);
+      return this.addContactRow(contacts[0]);
     } else {
       // if no ID is provided, assume contacts is a single contact object
       return this.addContactRow(contacts);
@@ -137,7 +150,7 @@ class TableView {
 
   // can be used to add a batch of contacts
   addContacts(contacts) {
-    this.initializeTable();
+    this.isNewContactAdded = true;
 
     // add each contact
     return contacts.map((contact) => this.addContactRow(contact));
