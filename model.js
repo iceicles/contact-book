@@ -15,17 +15,22 @@ class Model {
   }
 
   getContacts() {
-    console.log('[model] contacts - ', this.contacts);
-    return this.contacts;
+    // sort contacts by date in descending order (most recent first)
+    const sortedContacts = [...this.contacts].sort((a, b) => {
+      return b.date - a.date;
+    });
+
+    console.log('[model] sorted contacts - ', sortedContacts);
+    return sortedContacts;
   }
 
   addContact(data) {
     const newContact = {
       id: this.incrementId(),
       ...data,
-      date: new Date().toISOString(),
+      date: new Date(),
     };
-    this.contacts.push(newContact);
+    this.contacts.unshift(newContact);
     this.saveContacts();
   }
 
