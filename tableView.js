@@ -18,6 +18,8 @@ class TableView {
       this.createTableBody();
       this.tableInitialized = true;
       this.isNewContactAdded = false;
+      this.lastHeadItemElCreated = false;
+      this.deleteContactBtnVisible = false;
     }
   }
 
@@ -53,6 +55,50 @@ class TableView {
     return row.insertCell(); // <td/> in <tr><td></td></tr>
   }
 
+  createDeleteContactBtn(containerEl, id) {
+    let delBtnEl = document.createElement('button');
+    delBtnEl.textContent = 'Delete';
+    delBtnEl.classList.add('del-contact');
+    containerEl.appendChild(delBtnEl);
+    delBtnEl.addEventListener('click', () => {
+      console.log(`[tableView] - Deleting element with id ${id}...`);
+      let parentTableRow = delBtnEl.parentNode.parentNode;
+      parentTableRow.remove();
+    });
+    return delBtnEl;
+  }
+
+  toggleDeleteContactButton(containerEl, id) {
+    // remove delete contact buton from the DOM
+    if (containerEl.querySelector('button.del-contact')) {
+      containerEl.removeChild(containerEl.querySelector('.del-contact'));
+      return;
+    }
+
+    this.createDeleteContactBtn(containerEl, id);
+  }
+
+  createSettingsContainer(id) {
+    let containerEl = document.createElement('div');
+    let settingsEl = document.createElement('p');
+    let settingsSVG = document.createElement('img');
+
+    settingsSVG.src = './settings.svg';
+    settingsSVG.id = 'settings-svg';
+    settingsSVG.loading = 'lazy';
+    settingsSVG.classList.add('settings-svg');
+    containerEl.classList.add('settings-container');
+    settingsEl.classList.add('settings');
+    settingsEl.append(settingsSVG);
+    containerEl.append(settingsEl);
+
+    settingsEl.addEventListener('click', () => {
+      this.toggleDeleteContactButton(containerEl, id);
+    });
+
+    return containerEl;
+  }
+
   setTableDataContent(cell, key, value, contact) {
     cell.setAttribute('contenteditable', 'true');
 
@@ -66,6 +112,10 @@ class TableView {
 
     if (key === 'date') {
       cell.removeAttribute('contenteditable');
+      cell.insertAdjacentElement(
+        'afterend',
+        this.createSettingsContainer(contact.id)
+      );
       const date = new Date(value);
       cell.textContent = date.toLocaleDateString();
     } else {
@@ -85,10 +135,19 @@ class TableView {
     // get the display name for this key
     let headerName = this.getHeaderNameForKey(key);
 
+    let tableHeaderContent;
     if (!existingHeaders.includes(headerName)) {
-      let tableHeaderContent = this.createTableHeadItemElement(); // <th />
+      tableHeaderContent = this.createTableHeadItemElement(); // <th />
       tableHeaderContent.textContent = headerName;
       this.tableHeaderRow.append(tableHeaderContent); // <tr><th></th></tr>
+    }
+
+    if (key === 'date' && !this.lastHeadItemElCreated) {
+      let lastHeaderEl = document.createElement('th');
+      lastHeaderEl.style.background =
+        'linear-gradient(to right, var(--space-cadet-darkslateblue), var(--slate-deep) 10%, var(--space-cadet) 90%)';
+      tableHeaderContent.insertAdjacentElement('afterend', lastHeaderEl);
+      this.lastHeadItemElCreated = true;
     }
   }
 
