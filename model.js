@@ -5,7 +5,7 @@ class Model {
   constructor() {
     this.contacts = JSON.parse(localStorage.getItem(dataModel.CONTACT)) || [];
     this.id =
-      this.contacts.length > 0
+      this.getContactsLength() > 0
         ? Math.max(...this.contacts.map((c) => c.id))
         : 0;
   }
@@ -39,6 +39,22 @@ class Model {
     LocalStorage.clear();
   }
 
+  deleteContact(contactId) {
+    // find the contact in the array
+    const contactIndex = this.contacts.findIndex(
+      (contact) => contact.id === contactId
+    );
+    console.log(`[model] Deleting contact with id - ${contactId}`);
+    if (contactIndex !== -1) {
+      this.contacts = this.contacts.filter(
+        (contact) => contact.id !== contactId
+      );
+      console.log('[model] Updated contact after deletion - ', this.contacts);
+      this.saveContacts();
+      return this.contacts;
+    }
+  }
+
   updateContact(contactId, key, value) {
     // find the contact in the array
     const contactIndex = this.contacts.findIndex(
@@ -63,6 +79,14 @@ class Model {
   // save contacts to localStorage
   saveContacts() {
     LocalStorage.setItem(dataModel.CONTACT, this.contacts);
+  }
+
+  getContactsLength() {
+    return this.contacts.length;
+  }
+
+  resetContactId() {
+    return (this.id = 0);
   }
 
   //[not in use]

@@ -1,10 +1,14 @@
 import { debounce } from './debounce.js';
 import getMainEl from './mainTag.js';
+import ButtonView from './buttonView.js';
+import InitTable from './initTable.js';
+import SVGView from './svgView.js';
 
 class TableView {
   constructor() {
-    this.tableInitialized = false;
+    this.tableInitialized = InitTable.tableInitialized; // initially false
     this.updateContactCallback = null;
+    this.deleteContactCallback = null;
     // store a reference map of cells to their data
     // WeakMap used for performance reasons -  garbage collected
     this.cellMap = new WeakMap();
@@ -19,7 +23,6 @@ class TableView {
       this.tableInitialized = true;
       this.isNewContactAdded = false;
       this.lastHeadItemElCreated = false;
-      this.deleteContactBtnVisible = false;
     }
   }
 
@@ -55,15 +58,22 @@ class TableView {
     return row.insertCell(); // <td/> in <tr><td></td></tr>
   }
 
+  setDeleteContactCallback(callback) {
+    this.deleteContactCallback = callback;
+  }
+
+  removeTableElement() {
+    this.table.remove();
+  }
+
   createDeleteContactBtn(containerEl, id) {
-    let delBtnEl = document.createElement('button');
-    delBtnEl.textContent = 'Delete';
-    delBtnEl.classList.add('del-contact');
+    let delBtnEl = ButtonView.getDeleteContactBtn();
     containerEl.appendChild(delBtnEl);
     delBtnEl.addEventListener('click', () => {
-      console.log(`[tableView] - Deleting element with id ${id}...`);
+      console.log(`[tableView] Deleting contact with id ${id}...`);
       let parentTableRow = delBtnEl.parentNode.parentNode;
       parentTableRow.remove();
+      this.deleteContactCallback(id);
     });
     return delBtnEl;
   }
@@ -81,12 +91,8 @@ class TableView {
   createSettingsContainer(id) {
     let containerEl = document.createElement('div');
     let settingsEl = document.createElement('p');
-    let settingsSVG = document.createElement('img');
+    let settingsSVG = SVGView.getSettingsSVG();
 
-    settingsSVG.src = './settings.svg';
-    settingsSVG.id = 'settings-svg';
-    settingsSVG.loading = 'lazy';
-    settingsSVG.classList.add('settings-svg');
     containerEl.classList.add('settings-container');
     settingsEl.classList.add('settings');
     settingsEl.append(settingsSVG);

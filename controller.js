@@ -9,6 +9,7 @@ class Controller {
     // bind view to model
     this.view.bindAddContact(this.handleAddContact.bind(this));
     this.view.bindUpdateContact(this.handleUpdateContact.bind(this));
+    this.view.bindDeleteContact(this.handleDeleteContact.bind(this));
 
     // initial render
     this.updateView();
@@ -37,8 +38,19 @@ class Controller {
     this.updateView();
   }
 
+  // delete all contacts
   handleDeleteContacts() {
     this.model.deleteContacts();
+  }
+
+  // delete single contact
+  handleDeleteContact(id) {
+    this.model.deleteContact(id);
+    // resets view and model id ONLY when last contact is deleted (i.e., contacts length === 0)
+    if (!this.model.getContactsLength()) {
+      this.view.removeTableFromView();
+      this.model.resetContactId();
+    }
   }
 }
 

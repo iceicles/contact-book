@@ -1,5 +1,7 @@
 import TableView from './tableView.js';
 import getMainEl from './mainTag.js';
+import ButtonView from './buttonView.js';
+import InitTable from './initTable.js';
 
 class View {
   // initial view on screen
@@ -10,7 +12,8 @@ class View {
     this.email = document.querySelector('#email');
     this.submitBtn = document.querySelector('#submit-btn');
     this.noContactsMsg = document.createElement('p');
-    this.tableInitialized = false;
+    this.deleteAllContactsBtn = ButtonView.getDeleteAllContactsBtn();
+    this.tableInitialized = InitTable.tableInitialized; // initially false
   }
 
   // what gets rendered when a new contact is added
@@ -28,11 +31,7 @@ class View {
       getMainEl.querySelector('p.empty-contacts-msg')?.remove();
 
       // add 'delete all contacts' btn
-      this.deleteContactsBtn = document.createElement('button');
-      this.deleteContactsBtn.classList.add('del-contacts');
-      this.deleteContactsBtn.id = 'del-contacts';
-      this.deleteContactsBtn.textContent = 'Delete All Contacts';
-      getMainEl.append(this.deleteContactsBtn);
+      getMainEl.append(this.deleteAllContactsBtn);
 
       TableView.addContacts(Object.values(contacts));
       this.tableInitialized = true;
@@ -91,11 +90,23 @@ class View {
   bindDeleteContacts(handler) {
     // only add listener if there's a table present
     if (this.tableInitialized) {
-      this.deleteContactsBtn.addEventListener('click', () => {
+      this.deleteAllContactsBtn.addEventListener('click', () => {
         handler();
         location.reload(); // reloads current page
       });
     }
+  }
+
+  // delete single contact
+  bindDeleteContact(handler) {
+    TableView.setDeleteContactCallback(handler);
+  }
+
+  // resets view when last contact deleted
+  removeTableFromView() {
+    TableView.removeTableElement();
+    this.deleteAllContactsBtn.remove();
+    location.reload(); // reloads page and renders 'no contact msg'
   }
 }
 
