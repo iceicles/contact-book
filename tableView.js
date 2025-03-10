@@ -3,6 +3,7 @@ import getMainEl from './mainTag.js';
 import ButtonView from './buttonView.js';
 import InitTable from './initTable.js';
 import SVGView from './svgView.js';
+import { DEBOUNCE_DELAY } from './constants.js';
 
 class TableView {
   constructor() {
@@ -255,7 +256,10 @@ class TableView {
   // bind events to editable cells
   bindDataCellChanges(cell) {
     // debounce to avoid excessive updates while typing
-    const debouncedUpdate = debounce(() => this.handleCellEdit(cell), 500);
+    const debouncedUpdate = debounce(
+      () => this.handleCellEdit(cell),
+      DEBOUNCE_DELAY
+    );
 
     // listen for both input and 'Enter' key events
     cell.addEventListener('input', debouncedUpdate);
