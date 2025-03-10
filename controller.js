@@ -10,6 +10,7 @@ class Controller {
     this.view.bindAddContact(this.handleAddContact.bind(this));
     this.view.bindUpdateContact(this.handleUpdateContact.bind(this));
     this.view.bindDeleteContact(this.handleDeleteContact.bind(this));
+    this.view.handleSearchContacts();
 
     // initial render
     this.updateView();
@@ -51,6 +52,11 @@ class Controller {
       this.view.removeTableFromView();
       this.model.resetContactId();
     }
+  }
+
+  handleSearchContact(value) {
+    this.model.getSearchedContact(value);
+    // this.updateView()
   }
 }
 

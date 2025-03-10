@@ -36,6 +36,14 @@ class TableView {
     this.tableBody = this.table.createTBody(); // <tbody>
   }
 
+  getTableBody() {
+    return this.tableBody;
+  }
+
+  getTableHead() {
+    return this.tableHead;
+  }
+
   createTableBodyRow() {
     this.tableBodyRow = this.tableBody.insertRow(); // <tr/> in <tbody><tr></tr></tbody>
     return this.tableBodyRow;

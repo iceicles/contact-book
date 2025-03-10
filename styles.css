@@ -20,10 +20,10 @@
     --slate-brown: rgb(96,96,96);
     /* https://www.color-hex.com/color/34344a#color-schemes */
     /* https://encycolorpedia.com/34344a */
-    --space-cadet: rgb(52 52 74);
+    --space-cadet: rgb(30, 30, 61);
     --space-cadet-light: rgb(68 68 90);
     --space-cadet-darker: rgb(43 43 57);
-    --space-cadet-darkslateblue: rgb(72 61 139);
+    --space-cadet-darkslateblue: rgb(55, 43, 135);
     --space-cadet-inverted: rgb(203 203 181);
     --space-cadet-saturated: rgb(49 49 77);
     --space-cadet-desaturated: rgb(54 54 72);
@@ -104,6 +104,10 @@ input[type='submit']{
     color: white;
     border-bottom: 1px solid var(--slate-brown);
     background-color: var(--space-cadet);
+}
+
+.contact-form input:focus, 
+.search-container input:focus {
     border-radius: 5px;
 }
 
@@ -134,6 +138,26 @@ input[type='submit']{
     text-align: center;
 }
 
+.search-container {
+    margin-top: 4rem;
+}
+
+.search-container label input {
+    padding: 5px;
+    margin-left: 20px;
+    background-color: var(--space-cadet);
+    border-bottom: 1px solid var(--slate-brown);
+    color: white;
+}
+
+.no-search-msg {
+    display: block;
+    font-size: 20px;
+    margin-top: 2rem;
+    text-align: center;
+    width: max-content;
+}
+
 button.del-contacts {
     margin-bottom: 20px;
     background-color: var(--danger);
@@ -162,7 +186,6 @@ div.settings-container {
 .settings-svg {
     width: 1.2rem;
 }
-
 
 @media (max-width: 910px) {
     table {

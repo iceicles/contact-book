@@ -12,6 +12,8 @@ class View {
     this.email = document.querySelector('#email');
     this.submitBtn = document.querySelector('#submit-btn');
     this.noContactsMsg = document.createElement('p');
+    this.searchInput = document.querySelector('#search');
+    this.noSearchMsg = document.createElement('p');
     this.deleteAllContactsBtn = ButtonView.getDeleteAllContactsBtn();
     this.tableInitialized = InitTable.tableInitialized; // initially false
   }
@@ -107,6 +109,45 @@ class View {
     TableView.removeTableElement();
     this.deleteAllContactsBtn.remove();
     location.reload(); // reloads page and renders 'no contact msg'
+  }
+
+  getSearchInput() {
+    return this.searchInput.value.trim().toLowerCase();
+  }
+
+  // handle contacts search
+  handleSearchContacts() {
+    this.searchInput.addEventListener('input', () => {
+      if (this.tableInitialized) {
+        let tableBodyChildren = TableView.getTableBody().children; // [<tr></tr>] - nodelist
+        let tableBodyArray = Array.from(tableBodyChildren); // [tr, tr, tr] - array
+
+        let searchQuery = this.getSearchInput();
+
+        for (let tr of tableBodyArray) {
+          if (
+            searchQuery === '' ||
+            tr.innerHTML.toLowerCase().includes(searchQuery)
+          ) {
+            tr.style.display = '';
+          } else {
+            // hide the row if no match
+            tr.style.display = 'none';
+          }
+        }
+
+        if (tableBodyArray.every((row) => row.style.display === 'none')) {
+          this.noSearchMsg.classList.add('no-search-msg');
+          this.noSearchMsg.innerHTML = 'No item matching search...';
+          TableView.getTableBody().append(this.noSearchMsg);
+          TableView.getTableHead().style.display = 'none';
+          this.noSearchMsg.style.display = 'block';
+        } else {
+          TableView.getTableBody().removeChild(this.noSearchMsg);
+          TableView.getTableHead().style.display = '';
+        }
+      }
+    });
   }
 }
 
