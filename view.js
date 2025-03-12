@@ -121,28 +121,36 @@ class View {
       if (this.tableInitialized) {
         let tableBodyChildren = TableView.getTableBody().children; // [<tr></tr>] - nodelist
         let tableBodyArray = Array.from(tableBodyChildren); // [tr, tr, tr] - array
-
         let searchQuery = this.getSearchInput();
 
-        for (let tr of tableBodyArray) {
-          if (
-            searchQuery === '' ||
-            tr.innerHTML.toLowerCase().includes(searchQuery)
-          ) {
+        // looping through all rows
+        for (let tr of tableBodyChildren) {
+          let rowMatches = false;
+
+          // each <td> in the current row
+          let tdElements = tr.querySelectorAll('td');
+          for (let td of tdElements) {
+            if (td.innerHTML.toLowerCase().includes(searchQuery)) {
+              rowMatches = true; // at least one <td> matches, so the row is visible
+              break; // leave loop, no need to check further <td> elements in this row
+            }
+          }
+
+          if (rowMatches) {
             tr.style.display = '';
           } else {
-            // hide the row if no match
             tr.style.display = 'none';
           }
         }
 
+        // check if every row has a display of 'none'
         if (tableBodyArray.every((row) => row.style.display === 'none')) {
           this.noSearchMsg.classList.add('no-search-msg');
           this.noSearchMsg.innerHTML = 'No item matching search...';
           TableView.getTableBody().append(this.noSearchMsg);
           TableView.getTableHead().style.display = 'none';
           this.noSearchMsg.style.display = 'block';
-        } else {
+        } else if (TableView.getTableBody().contains(this.noSearchMsg)) {
           TableView.getTableBody().removeChild(this.noSearchMsg);
           TableView.getTableHead().style.display = '';
         }
