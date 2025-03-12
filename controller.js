@@ -53,11 +53,6 @@ class Controller {
       this.model.resetContactId();
     }
   }
-
-  handleSearchContact(value) {
-    this.model.getSearchedContact(value);
-    // this.updateView()
-  }
 }
 
 new Controller(new Model(), new View());
