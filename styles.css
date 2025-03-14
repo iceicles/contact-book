@@ -186,6 +186,52 @@ div.settings-container {
     width: 1.2rem;
 }
 
+.modal-container {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.4);
+    backdrop-filter: blur(1px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.modal-content {
+    border: 1px solid var(--slate-brown);
+    border-radius: 5px;
+    padding: 20px;
+    height: max-content;
+    width: 330px;
+    background-color: rgba(0,0,0);
+    text-align: center; /* x-axis */
+    align-content: center; /* y-axis works bc container is flex */
+    line-height: 1.5rem;
+}
+
+.modal-btns-container {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-evenly;
+
+    .yes-btn,
+    .no-btn{
+        padding: 8px 15px;
+        border-radius: 5px;
+    }
+
+    .yes-btn {
+        background-color: var(--success); 
+    }
+
+    .no-btn {
+        background-color: var(--danger)
+    }
+}
+
 @media (max-width: 910px) {
     table {
         /* border: 1px solid var(--space-cadet-light); */
