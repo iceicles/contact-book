@@ -1,4 +1,4 @@
-import { debounce } from '../helper/debounce.js';
+import { debounce } from '../helpers/debounce.js';
 import getMainEl from '../mainTag.js';
 import ButtonView from './buttonView.js';
 import InitTable from '../initTable.js';

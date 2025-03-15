@@ -1,5 +1,5 @@
 import Model from './model/model.js';
-import Observable from './helper/observable.js';
+import Observable from './helpers/observable.js';
 import View from './view/view.js';
 
 class Controller {
