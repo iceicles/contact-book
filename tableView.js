@@ -4,12 +4,12 @@ import ButtonView from './buttonView.js';
 import InitTable from './initTable.js';
 import SVGView from './svgView.js';
 import { DEBOUNCE_DELAY } from './constants.js';
+import ModalView from './modalView.js';
 
 class TableView {
   constructor() {
     this.tableInitialized = InitTable.tableInitialized; // initially false
     this.updateContactCallback = null;
-    this.deleteContactCallback = null;
     // store a reference map of cells to their data
     // WeakMap used for performance reasons -  garbage collected
     this.cellMap = new WeakMap();
@@ -67,37 +67,44 @@ class TableView {
     return row.insertCell(); // <td/> in <tr><td></td></tr>
   }
 
-  setDeleteContactCallback(callback) {
-    this.deleteContactCallback = callback;
-  }
-
   removeTableElement() {
     this.table.remove();
   }
 
-  createDeleteContactBtn(containerEl, id) {
+  createDeleteContactBtn(containerEl, contact) {
     let delBtnEl = ButtonView.getDeleteContactBtn();
     containerEl.appendChild(delBtnEl);
     delBtnEl.addEventListener('click', () => {
-      console.log(`[tableView] Deleting contact with id ${id}...`);
-      let parentTableRow = delBtnEl.parentNode.parentNode;
-      parentTableRow.remove();
-      this.deleteContactCallback(id);
+      ModalView.render(
+        `Are you sure you want to delete ${
+          contact.firstName ||
+          contact.lastName ||
+          contact.email ||
+          contact.phoneNumber
+        }`,
+        null,
+        contact.id,
+        delBtnEl
+      );
     });
-    return delBtnEl;
   }
 
-  toggleDeleteContactButton(containerEl, id) {
+  removeContactFromDOM(delBtnEl) {
+    let parentTableRow = delBtnEl.parentNode.parentNode;
+    parentTableRow.remove();
+  }
+
+  toggleDeleteContactButton(containerEl, contact) {
     // remove delete contact buton from the DOM
     if (containerEl.querySelector('button.del-contact')) {
       containerEl.removeChild(containerEl.querySelector('.del-contact'));
       return;
     }
 
-    this.createDeleteContactBtn(containerEl, id);
+    this.createDeleteContactBtn(containerEl, contact);
   }
 
-  createSettingsContainer(id) {
+  createSettingsContainer(contact) {
     let containerEl = document.createElement('div');
     let settingsEl = document.createElement('p');
     let settingsSVG = SVGView.getSettingsSVG();
@@ -108,7 +115,7 @@ class TableView {
     containerEl.append(settingsEl);
 
     settingsEl.addEventListener('click', () => {
-      this.toggleDeleteContactButton(containerEl, id);
+      this.toggleDeleteContactButton(containerEl, contact);
     });
 
     return containerEl;
@@ -129,7 +136,7 @@ class TableView {
       cell.removeAttribute('contenteditable');
       cell.insertAdjacentElement(
         'afterend',
-        this.createSettingsContainer(contact.id)
+        this.createSettingsContainer(contact)
       );
       const date = new Date(value);
       cell.textContent = date.toLocaleDateString();

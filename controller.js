@@ -1,4 +1,5 @@
 import Model from './model.js';
+import Observable from './observable.js';
 import View from './view.js';
 
 class Controller {
@@ -9,20 +10,23 @@ class Controller {
     // bind view to model
     this.view.bindAddContact(this.handleAddContact.bind(this));
     this.view.bindUpdateContact(this.handleUpdateContact.bind(this));
-    this.view.bindDeleteContact(this.handleDeleteContact.bind(this));
     this.view.handleSearchContacts();
 
     // initial render
     this.updateView();
+
+    // bind 'delete all contacts' button view to handler
+    // this should get called after updateView because the button gets appended to DOM during render..
+    // ..so before render, it doesn't exist
+    this.view.bindDeleteContacts(this.handleDeleteContacts.bind(this));
+
+    // calls observer with (any) passed data
+    Observable.subscribe(this.handleDeleteContact.bind(this));
   }
 
   updateView() {
     // update view with newly added contact
     this.view.render(this.model.getContacts(), this.model.id);
-
-    // update view with 'delete all contacts' button
-    this.view.bindDeleteContacts(this.handleDeleteContacts.bind(this));
-    // this.view.render(this.model.getRecentlyAddedContact());
   }
 
   handleUpdateContact(contactId, key, value) {

@@ -2,6 +2,7 @@ import TableView from './tableView.js';
 import getMainEl from './mainTag.js';
 import ButtonView from './buttonView.js';
 import InitTable from './initTable.js';
+import ModalView from './modalView.js';
 
 class View {
   // initial view on screen
@@ -90,18 +91,12 @@ class View {
 
   // delete all contacts
   bindDeleteContacts(handler) {
-    // only add listener if there's a table present
-    if (this.tableInitialized) {
-      this.deleteAllContactsBtn.addEventListener('click', () => {
-        handler();
-        location.reload(); // reloads current page
-      });
-    }
-  }
-
-  // delete single contact
-  bindDeleteContact(handler) {
-    TableView.setDeleteContactCallback(handler);
+    this.deleteAllContactsBtn.addEventListener('click', () => {
+      ModalView.render(
+        'Are you sure you want to delete all contacts?',
+        handler
+      );
+    });
   }
 
   // resets view when last contact deleted
