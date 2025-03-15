@@ -1,9 +1,9 @@
-import { debounce } from './debounce.js';
-import getMainEl from './mainTag.js';
+import { debounce } from '../helper/debounce.js';
+import getMainEl from '../mainTag.js';
 import ButtonView from './buttonView.js';
-import InitTable from './initTable.js';
+import InitTable from '../initTable.js';
 import SVGView from './svgView.js';
-import { DEBOUNCE_DELAY } from './constants.js';
+import { DEBOUNCE_DELAY } from '../constants/constants.js';
 import ModalView from './modalView.js';
 
 class TableView {

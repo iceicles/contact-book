@@ -1,6 +1,6 @@
 import ButtonView from './buttonView.js';
-import getMainEl from './mainTag.js';
-import Observable from './observable.js';
+import getMainEl from '../mainTag.js';
+import Observable from '../helper/observable.js';
 import TableView from './tableView.js';
 
 class ModalView {

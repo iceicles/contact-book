@@ -1,5 +1,5 @@
-import LocalStorage from './localStorage.js';
-import { dataModel } from './interfaces.js';
+import LocalStorage from '../helper/localStorage.js';
+import { dataModel } from '../interface/interfaces.js';
 
 class Model {
   constructor() {

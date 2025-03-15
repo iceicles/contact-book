@@ -1,7 +1,7 @@
 import TableView from './tableView.js';
-import getMainEl from './mainTag.js';
+import getMainEl from '../mainTag.js';
 import ButtonView from './buttonView.js';
-import InitTable from './initTable.js';
+import InitTable from '../initTable.js';
 import ModalView from './modalView.js';
 
 class View {

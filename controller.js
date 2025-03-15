@@ -1,6 +1,6 @@
-import Model from './model.js';
-import Observable from './observable.js';
-import View from './view.js';
+import Model from './model/model.js';
+import Observable from './helper/observable.js';
+import View from './view/view.js';
 
 class Controller {
   constructor(model, view) {
