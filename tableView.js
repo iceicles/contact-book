@@ -262,7 +262,6 @@ class TableView {
 
     const { contactId, key } = cellData;
     const newValue = cell.textContent;
-    console.log(`Updating contact ${contactId}, field ${key} to "${newValue}"`);
 
     // call the callback (the handler) from the controller and pass args
     this.updateContactCallback(contactId, key, newValue);

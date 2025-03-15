@@ -20,7 +20,6 @@ class Model {
       return b.date - a.date;
     });
 
-    console.log('[model] sorted contacts - ', sortedContacts);
     return sortedContacts;
   }
 
@@ -44,12 +43,10 @@ class Model {
     const contactIndex = this.contacts.findIndex(
       (contact) => contact.id === contactId
     );
-    console.log(`[model] Deleting contact with id - ${contactId}`);
     if (contactIndex !== -1) {
       this.contacts = this.contacts.filter(
         (contact) => contact.id !== contactId
       );
-      console.log('[model] Updated contact after deletion - ', this.contacts);
       this.saveContacts();
       return this.contacts;
     }
@@ -65,7 +62,6 @@ class Model {
     if (contactIndex !== -1) {
       // update the specific field
       this.contacts[contactIndex][key] = value;
-      console.log(`Updated contact ${contactId}: ${key} = ${value}`);
 
       // save to localStorage
       this.saveContacts();

@@ -29,8 +29,6 @@ class ModalView {
         this.closeModal();
       }
     });
-
-    this.modalOpen = false;
   }
 
   render(msg, handler, contactId, delBtnEl) {

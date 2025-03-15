@@ -30,9 +30,6 @@ class Controller {
   }
 
   handleUpdateContact(contactId, key, value) {
-    console.log(
-      `Controller handling update: contact ${contactId}, field ${key} to "${value}"`
-    );
     this.model.updateContact(contactId, key, value);
     // no need to call updateView() here - we don't need to refresh the entire table
     // the change is already visible in the DOM because the user edited it directly
